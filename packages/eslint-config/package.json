@@ -1,0 +1,21 @@
+{
+  "name": "@translator/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.cjs",
+  "files": ["index.cjs", "base.cjs", "react.cjs", "node.cjs"],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.8.1",
+    "@typescript-eslint/parser": "^8.8.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.1",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.12"
+  },
+  "peerDependencies": {
+    "eslint": ">=8.57.0"
+  }
+}

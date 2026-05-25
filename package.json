@@ -1,0 +1,41 @@
+{
+  "name": "translator-monorepo",
+  "version": "2.0.0",
+  "private": true,
+  "description": "AI 网页翻译扩展（React 19 + Antd 6）与 NestJS 后端组成的 monorepo",
+  "engines": {
+    "node": ">=20.11.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.12.3",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "dev:web": "turbo run dev --filter=@translator/extension",
+    "dev:server": "turbo run dev --filter=@translator/server",
+    "build": "turbo run build",
+    "build:web": "turbo run build --filter=@translator/extension",
+    "build:server": "turbo run build --filter=@translator/server",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint -- --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,cjs,json,md,css,prisma}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,cjs,json,md,css,prisma}\"",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rimraf node_modules",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@types/node": "^20.16.10",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "turbo": "^2.2.3",
+    "typescript": "^5.6.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,cjs}": ["prettier --write", "eslint --fix"],
+    "*.{json,md,css,prisma}": ["prettier --write"]
+  }
+}

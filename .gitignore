@@ -1,17 +1,33 @@
-# 依赖与构建产物
+# 依赖
 node_modules/
-dist/
-*.zip
+.pnpm-store/
 
-# 环境与密钥（切勿提交 API Key）
+# 构建产物
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+
+# 环境与密钥
 .env
 .env.*
 !.env.example
 config.local.json
+apps/server/.env
+
+# Prisma
+apps/server/prisma/dev.db
+apps/server/prisma/*.db-journal
+
+# 日志
+*.log
+logs/
 
 # 编辑器与系统
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
-*.log
+
+# 测试
+coverage/
