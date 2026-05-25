@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>英文网页翻译助手 - 设置</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>扩展设置</h1>
+      <p class="lead">使用 <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">DeepSeek API</a> 作为翻译引擎。</p>
+
+      <form id="optionsForm">
+        <fieldset>
+          <legend>DeepSeek API</legend>
+
+          <label class="field">
+            <span>API Key <em>*</em></span>
+            <input
+              type="password"
+              id="apiKey"
+              name="apiKey"
+              placeholder="sk-..."
+              autocomplete="off"
+            />
+            <small>密钥保存在浏览器本地。也可在项目根目录放置 <code>config.local.json</code>（参考 example 文件），扩展会自动导入；<strong>.env 文件不会被读取</strong>。</small>
+          </label>
+
+          <label class="field">
+            <span>模型</span>
+            <select id="model" name="model">
+              <option value="deepseek-chat">deepseek-chat（推荐）</option>
+              <option value="deepseek-v4-flash">deepseek-v4-flash</option>
+              <option value="deepseek-v4-pro">deepseek-v4-pro</option>
+            </select>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>行为</legend>
+          <label class="checkbox">
+            <input type="checkbox" id="enabled" checked />
+            启用扩展
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="autoPrompt" checked />
+            检测到英文页面时自动显示翻译提示条
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="selectTranslate" />
+            开启划词翻译（鼠标选中英文后在附近显示翻译面板）
+          </label>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn--primary">保存设置</button>
+          <span id="saveHint" class="hint" aria-live="polite"></span>
+        </div>
+      </form>
+    </main>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

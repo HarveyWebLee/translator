@@ -1,0 +1,17 @@
+# 依赖与构建产物
+node_modules/
+dist/
+*.zip
+
+# 环境与密钥（切勿提交 API Key）
+.env
+.env.*
+!.env.example
+config.local.json
+
+# 编辑器与系统
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

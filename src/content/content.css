@@ -1,0 +1,110 @@
+/* 页面顶部翻译提示条 */
+.ds-translator-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2147483646;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei",
+    sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  animation: ds-slide-down 0.35s ease;
+}
+
+@keyframes ds-slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.ds-translator-banner__inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+  color: #fff;
+}
+
+.ds-translator-banner__icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.ds-translator-banner__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-translator-banner__text strong {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.ds-translator-banner__meta {
+  display: block;
+  font-size: 12px;
+  opacity: 0.88;
+}
+
+.ds-translator-banner__actions {
+  display: flex !important;
+  gap: 8px;
+  flex-shrink: 0;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.ds-translator-banner .ds-btn {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.ds-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.ds-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.ds-btn--primary {
+  background: #fff;
+  color: #1d4ed8;
+}
+
+.ds-btn--primary:hover:not(:disabled) {
+  background: #eff6ff;
+}
+
+.ds-btn--ghost {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.ds-btn--ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.ds-translator-banner--loading .ds-translator-banner__inner {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+}
