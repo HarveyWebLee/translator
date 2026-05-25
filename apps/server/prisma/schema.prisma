@@ -1,0 +1,123 @@
+// 翻译扩展后端 Prisma schema
+// 包含：用户、订阅、用量、SSE 会话、OAuth/SMS 占位表
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// 会员等级
+enum Tier {
+  FREE
+  BASIC
+  PREMIUM
+}
+
+/// 订阅状态
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+  PENDING
+}
+
+/// 用户主表
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String?
+  nickname      String?
+  tier          Tier     @default(FREE)
+  /// 当前 tier 到期时间；free 永久 null
+  tierExpiresAt DateTime?
+  /// OAuth 登录用户的关联标识
+  oauthProvider String?
+  oauthSubject  String?
+  /// 短信验证登录的手机号
+  phone         String?  @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  refreshTokens RefreshToken[]
+  subscriptions Subscription[]
+  usageLogs     UsageLog[]
+  streamSessions StreamSession[]
+
+  @@unique([oauthProvider, oauthSubject])
+}
+
+/// Refresh Token（持久化便于撤销）
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// 订阅记录（支付骨架，本期不接入真实 SDK）
+model Subscription {
+  id         String              @id @default(cuid())
+  userId     String
+  tier       Tier
+  status     SubscriptionStatus  @default(PENDING)
+  startsAt   DateTime
+  expiresAt  DateTime
+  provider   String              // alipay / wechat / stripe
+  externalId String?
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+  user       User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+/// 用量日志（用于计费/限流统计）
+model UsageLog {
+  id         String   @id @default(cuid())
+  userId     String
+  providerId String
+  modelId    String
+  tier       Tier
+  chars      Int
+  tokens     Int?
+  /// 估算费用（USD，可选）
+  costEstUsd Decimal? @db.Decimal(10, 6)
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+/// SSE 翻译会话（POST 创建 → GET SSE 消费）
+model StreamSession {
+  id         String   @id @default(cuid())
+  userId     String
+  providerId String
+  modelId    String
+  /// 请求体快照（segments + userApiKey 临时存储，处理完即删）
+  payload    Json
+  consumedAt DateTime?
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+/// 短信验证码（开发期：mock；正式：接入 SDK 后写入）
+model SmsCode {
+  phone     String   @id
+  code      String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
+}
