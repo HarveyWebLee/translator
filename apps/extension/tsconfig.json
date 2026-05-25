@@ -1,0 +1,14 @@
+{
+  "extends": "@translator/tsconfig/react.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "noUncheckedIndexedAccess": false,
+    "types": ["chrome", "node", "vite/client"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules", "vite.config.ts"]
+}

@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import type { SimpleTranslator } from '@translator/llm-core';
-import type { ProviderDescriptor } from '@translator/shared-types';
-
 import { AppConfigService } from '../../../config/app-config.service';
 import { ModelCatalog } from '../catalog/model.catalog';
+
+import type { SimpleTranslator } from '@translator/llm-core';
+import type { ProviderDescriptor } from '@translator/shared-types';
 
 @Injectable()
 export class LibreTranslateProvider implements SimpleTranslator {

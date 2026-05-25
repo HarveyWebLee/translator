@@ -8,7 +8,7 @@ module.exports = {
   trailingComma: 'all',
   bracketSpacing: true,
   arrowParens: 'always',
-  endOfLine: 'lf',
+  endOfLine: 'auto',
   overrides: [
     {
       files: '*.md',

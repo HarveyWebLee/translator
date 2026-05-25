@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import translate from 'google-translate-api-x';
 
+import { ModelCatalog } from '../catalog/model.catalog';
+
 import type { SimpleTranslator } from '@translator/llm-core';
 import type { ProviderDescriptor } from '@translator/shared-types';
-
-import { ModelCatalog } from '../catalog/model.catalog';
 
 /**
  * Google 翻译公开端点：通过 google-translate-api-x 包装。

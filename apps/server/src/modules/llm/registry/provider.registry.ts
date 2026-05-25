@@ -1,8 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
-import type { LlmProvider, SimpleTranslator } from '@translator/llm-core';
-
 import { LLM_PROVIDERS_TOKEN } from '../llm.tokens';
+
+import type { LlmProvider, SimpleTranslator } from '@translator/llm-core';
 
 type AnyProvider = LlmProvider | SimpleTranslator;
 

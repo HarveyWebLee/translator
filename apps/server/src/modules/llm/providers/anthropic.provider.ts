@@ -1,6 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { Injectable, Logger } from '@nestjs/common';
 
+import { ModelCatalog } from '../catalog/model.catalog';
+
 import type {
   ChatMessage,
   ChatOptions,
@@ -9,8 +11,6 @@ import type {
   LlmProvider,
 } from '@translator/llm-core';
 import type { ProviderDescriptor } from '@translator/shared-types';
-
-import { ModelCatalog } from '../catalog/model.catalog';
 
 @Injectable()
 export class AnthropicProvider implements LlmProvider {

@@ -3,14 +3,14 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import type { TranslateStreamEvent } from '@translator/shared-types';
-
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 import { BatchTranslateDto } from './dto/batch.dto';
 import { SelectionTranslateDto } from './dto/selection.dto';
 import { SseSessionService } from './sse-session.service';
 import { TranslationService } from './translation.service';
+
+import type { TranslateStreamEvent } from '@translator/shared-types';
 
 @ApiTags('translation')
 @ApiBearerAuth()

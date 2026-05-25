@@ -1,5 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { AppConfigService } from '../../../config/app-config.service';
+import { ModelCatalog } from '../catalog/model.catalog';
+
 import type {
   ChatMessage,
   ChatOptions,
@@ -8,9 +11,6 @@ import type {
   LlmProvider,
 } from '@translator/llm-core';
 import type { ProviderDescriptor } from '@translator/shared-types';
-
-import { AppConfigService } from '../../../config/app-config.service';
-import { ModelCatalog } from '../catalog/model.catalog';
 
 /**
  * Ollama 本地推理 Provider。

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import type { ProviderDescriptor } from '@translator/shared-types';
-
 import { ModelCatalog } from '../catalog/model.catalog';
 
 import { OpenAICompatibleProvider } from './openai-compatible.base';
+
+import type { ProviderDescriptor } from '@translator/shared-types';
 
 @Injectable()
 export class DeepSeekProvider extends OpenAICompatibleProvider {

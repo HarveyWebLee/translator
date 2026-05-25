@@ -1,10 +1,10 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-
-import type { MembershipTier } from '@translator/shared-types';
 import { isTierAtLeast } from '@translator/shared-types';
 
 import { REQUIRE_TIER_KEY } from '../decorators/require-tier.decorator';
+
+import type { MembershipTier } from '@translator/shared-types';
 
 /**
  * 会员等级守卫：依据 @RequireTier 元数据，校验当前用户 tier 是否达标。

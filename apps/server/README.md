@@ -30,18 +30,18 @@ pnpm dev
 
 ## 关键路由
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/auth/register` | 邮箱注册 |
-| POST | `/auth/login` | 邮箱登录 |
-| POST | `/auth/refresh` | 刷新 token |
-| GET | `/auth/me` | 当前用户信息 |
-| GET | `/llm/models` | 获取当前会员等级可见的模型列表 |
-| POST | `/translation/batch` | 批量翻译 |
-| POST | `/translation/selection` | 划词翻译 |
-| POST | `/translation/stream/session` | 创建 SSE 流会话 |
-| GET | `/translation/stream/:sessionId` | SSE 流式翻译 |
-| POST | `/billing/subscribe` | 升级订阅（骨架） |
+| 方法 | 路径                             | 说明                           |
+| ---- | -------------------------------- | ------------------------------ |
+| POST | `/auth/register`                 | 邮箱注册                       |
+| POST | `/auth/login`                    | 邮箱登录                       |
+| POST | `/auth/refresh`                  | 刷新 token                     |
+| GET  | `/auth/me`                       | 当前用户信息                   |
+| GET  | `/llm/models`                    | 获取当前会员等级可见的模型列表 |
+| POST | `/translation/batch`             | 批量翻译                       |
+| POST | `/translation/selection`         | 划词翻译                       |
+| POST | `/translation/stream/session`    | 创建 SSE 流会话                |
+| GET  | `/translation/stream/:sessionId` | SSE 流式翻译                   |
+| POST | `/billing/subscribe`             | 升级订阅（骨架）               |
 
 ## OAuth / 短信骨架
 

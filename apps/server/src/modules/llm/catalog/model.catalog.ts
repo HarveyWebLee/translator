@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-
-import type { ModelDescriptor, ProviderDescriptor } from '@translator/shared-types';
 import { isTierAtLeast } from '@translator/shared-types';
-import type { MembershipTier } from '@translator/shared-types';
+
+import type { ModelDescriptor, ProviderDescriptor, MembershipTier } from '@translator/shared-types';
 
 /**
  * 模型目录：声明每个模型的 minTier、keySource、能力。

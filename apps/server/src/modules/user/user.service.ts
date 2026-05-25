@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import type { MembershipState } from '@translator/shared-types';
-
 import { PrismaService } from '../prisma/prisma.service';
 import { QuotaService } from '../quota/quota.service';
+
+import type { MembershipState } from '@translator/shared-types';
 
 @Injectable()
 export class UserService {

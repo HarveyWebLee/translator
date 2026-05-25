@@ -5,13 +5,12 @@ import { JwtService } from '@nestjs/jwt';
 import { Tier } from '@prisma/client';
 import * as argon2 from 'argon2';
 
-import type { AuthTokens, UserProfile } from '@translator/shared-types';
-
 import { AppConfigService } from '../../config/app-config.service';
 import { PrismaService } from '../prisma/prisma.service';
 
 import type { LoginDto } from './dto/login.dto';
 import type { RegisterDto } from './dto/register.dto';
+import type { AuthTokens, UserProfile } from '@translator/shared-types';
 
 interface JwtPayload {
   sub: string;

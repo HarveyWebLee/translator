@@ -38,6 +38,9 @@ module.exports = {
       },
     ],
     'import/no-unresolved': 'off',
+    // 部分 SDK（OpenAI/Anthropic 等）同时通过 default 导出类与同名 named 导出，
+    // 该规则会误报，统一关闭。
+    'import/no-named-as-default': 'off',
   },
   ignorePatterns: ['dist', 'build', 'node_modules', '.turbo', 'coverage'],
 };

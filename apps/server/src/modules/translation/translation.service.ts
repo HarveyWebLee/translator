@@ -1,18 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Tier } from '@prisma/client';
 
-import type {
-  TranslateBatchResponse,
-  TranslateSelectionResponse,
-  TranslateStreamEvent,
-} from '@translator/shared-types';
-
 import { LlmService } from '../llm/llm.service';
 import { ProviderRegistry } from '../llm/registry/provider.registry';
 import { QuotaService } from '../quota/quota.service';
 
-import type { BatchTranslateDto } from './dto/batch.dto';
-import type { SelectionTranslateDto } from './dto/selection.dto';
 import {
   SYSTEM_PROMPT_BATCH,
   SYSTEM_PROMPT_SELECTION,
@@ -20,6 +12,14 @@ import {
   parseJsonArray,
   sanitizeTranslation,
 } from './prompts';
+
+import type { BatchTranslateDto } from './dto/batch.dto';
+import type { SelectionTranslateDto } from './dto/selection.dto';
+import type {
+  TranslateBatchResponse,
+  TranslateSelectionResponse,
+  TranslateStreamEvent,
+} from '@translator/shared-types';
 
 const MAX_ITEMS_PER_BATCH = 15;
 const MAX_CHARS_PER_BATCH = 3500;
@@ -40,11 +40,7 @@ export class TranslationService {
   ) {}
 
   /** 批量翻译入口 */
-  async batch(
-    userId: string,
-    tier: Tier,
-    dto: BatchTranslateDto,
-  ): Promise<TranslateBatchResponse> {
+  async batch(userId: string, tier: Tier, dto: BatchTranslateDto): Promise<TranslateBatchResponse> {
     const totalChars = dto.segments.reduce((a, s) => a + s.text.length, 0);
     await this.quota.assertWithinQuota(userId, tier, totalChars);
 

@@ -1,11 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import type { MembershipTier } from '@translator/shared-types';
-
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 import { ModelCatalog } from './catalog/model.catalog';
+
+import type { MembershipTier } from '@translator/shared-types';
 
 @ApiTags('llm')
 @ApiBearerAuth()

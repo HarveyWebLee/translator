@@ -1,6 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import type { Observable } from 'rxjs';
 
 /**
  * 统一非流式接口的响应格式：{ ok: true, data }。

@@ -1,6 +1,5 @@
-import type { ProviderDescriptor } from '@translator/shared-types';
-
 import type { ChatMessage, ChatOptions, ChatResult, ChatStreamChunk } from './types';
+import type { ProviderDescriptor } from '@translator/shared-types';
 
 /**
  * LLM Provider 统一契约。后端各实现类需要满足此接口。
