@@ -17,8 +17,8 @@
     "build:server": "turbo run build --filter=@translator/server",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint -- --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,js,cjs,json,md,css,prisma}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,cjs,json,md,css,prisma}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,js,cjs,json,md,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,cjs,json,md,css}\"",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean && rimraf node_modules",
     "prepare": "husky"
@@ -27,6 +27,7 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@types/node": "^20.16.10",
+    "eslint": "8.57.1",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
@@ -36,11 +37,11 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,cjs}": [
-      "prettier --write",
-      "eslint --fix"
+      "pnpm exec prettier --write",
+      "pnpm exec eslint --fix"
     ],
-    "*.{json,md,css,prisma}": [
-      "prettier --write"
+    "*.{json,md,css}": [
+      "pnpm exec prettier --write"
     ]
   }
 }

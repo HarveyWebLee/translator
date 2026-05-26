@@ -48,24 +48,24 @@ translator/
 
 ## 技术栈
 
-| 层级       | 选型                                                                                                             |
-| ---------- | ---------------------------------------------------------------------------------------------------------------- |
-| 前端       | React 19、Ant Design 6（原生兼容 React 19）、Zustand、@tanstack/react-query、Vite、@crxjs/vite-plugin                       |
-| 浏览器扩展 | Chrome Manifest V3（service worker + content scripts + popup/options）                                            |
-| 后端       | NestJS 11、Prisma、PostgreSQL、JWT（refresh rotation）、Passport、Swagger、helmet、zod                            |
-| 流式协议   | SSE（fetch + ReadableStream，前端兼容扩展环境）                                                                   |
-| LLM 接入   | DeepSeek / OpenAI / Anthropic / Ollama / Google Translate（公开端点） / LibreTranslate                            |
-| 工程化     | pnpm workspace、turborepo、ESLint、Prettier、TypeScript、Husky、Commitlint（Angular）                              |
+| 层级       | 选型                                                                                                  |
+| ---------- | ----------------------------------------------------------------------------------------------------- |
+| 前端       | React 19、Ant Design 6（原生兼容 React 19）、Zustand、@tanstack/react-query、Vite、@crxjs/vite-plugin |
+| 浏览器扩展 | Chrome Manifest V3（service worker + content scripts + popup/options）                                |
+| 后端       | NestJS 11、Prisma、PostgreSQL、JWT（refresh rotation）、Passport、Swagger、helmet、zod                |
+| 流式协议   | SSE（fetch + ReadableStream，前端兼容扩展环境）                                                       |
+| LLM 接入   | DeepSeek / OpenAI / Anthropic / Ollama / Google Translate（公开端点） / LibreTranslate                |
+| 工程化     | pnpm workspace、turborepo、ESLint、Prettier、TypeScript、Husky、Commitlint（Angular）                 |
 
 ---
 
 ## 会员体系与 LLM Key 策略
 
-| 等级     | 可用引擎                          | API Key 来源        |
-| -------- | --------------------------------- | ------------------- |
-| 免费     | Google 公开端点 / LibreTranslate  | 无需 Key            |
-| 初级     | 通用 LLM（DeepSeek / OpenAI 等）  | 用户自带，保存在本地 |
-| 高级     | 全部模型（含开发者赞助的高级模型） | 后端持有（env）     |
+| 等级 | 可用引擎                           | API Key 来源         |
+| ---- | ---------------------------------- | -------------------- |
+| 免费 | Google 公开端点 / LibreTranslate   | 无需 Key             |
+| 初级 | 通用 LLM（DeepSeek / OpenAI 等）   | 用户自带，保存在本地 |
+| 高级 | 全部模型（含开发者赞助的高级模型） | 后端持有（env）      |
 
 模型清单与 tier 可见性在 `apps/server/src/modules/llm/catalog/model.catalog.ts` 统一声明，前端通过 `/api/v1/llm/models` 拉取并按 `tier` 过滤展示。
 
@@ -122,16 +122,16 @@ pnpm build:web
 
 ## 常用根脚本
 
-| 命令               | 说明                                          |
-| ------------------ | --------------------------------------------- |
-| `pnpm dev`         | turbo 并行启动所有子项目 dev                  |
-| `pnpm build`       | 构建所有子项目（缓存命中跳过）                |
-| `pnpm lint`        | 全仓 ESLint                                   |
-| `pnpm lint:fix`    | 全仓 ESLint --fix                             |
-| `pnpm format`      | Prettier 全仓格式化                           |
-| `pnpm format:check`| Prettier 校验                                 |
-| `pnpm typecheck`   | 全仓 TypeScript 检查                          |
-| `pnpm clean`       | 清理 dist/build/.turbo 与 node_modules        |
+| 命令                | 说明                                   |
+| ------------------- | -------------------------------------- |
+| `pnpm dev`          | turbo 并行启动所有子项目 dev           |
+| `pnpm build`        | 构建所有子项目（缓存命中跳过）         |
+| `pnpm lint`         | 全仓 ESLint                            |
+| `pnpm lint:fix`     | 全仓 ESLint --fix                      |
+| `pnpm format`       | Prettier 全仓格式化                    |
+| `pnpm format:check` | Prettier 校验                          |
+| `pnpm typecheck`    | 全仓 TypeScript 检查                   |
+| `pnpm clean`        | 清理 dist/build/.turbo 与 node_modules |
 
 各子项目内同样提供 `dev` / `build` / `lint` / `typecheck`，turbo 通过 workspace 过滤器精准调度。
 

@@ -14,9 +14,6 @@ module.exports = {
       files: '*.md',
       options: { proseWrap: 'preserve' },
     },
-    {
-      files: '*.prisma',
-      options: { plugins: [] },
-    },
+    // prisma schema 由 `prisma format` 维护，不交给 prettier
   ],
 };
