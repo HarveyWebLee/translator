@@ -1,0 +1,43 @@
+# 跨平台协作：文本统一为 LF，避免 Windows/macOS/Linux 之间 CRLF/LF 来回切换。
+# 与 `.vscode/settings.json` 中 `files.eol`、Prettier 默认一致。
+* text=auto eol=lf
+
+# Windows 原生脚本若需 CRLF，取消下一行注释（本仓库以 LF 为主时可保持注释）
+# *.bat text eol=crlf
+# *.cmd text eol=crlf
+
+# ---------- 常见二进制：禁止按文本做换行归一化 / diff 合并 ----------
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.icns binary
+
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tgz binary
+*.7z binary
+*.rar binary
+
+*.wasm binary
+*.node binary
+*.so binary
+*.dylib binary
+*.dll binary
+*.exe binary
+
+# 音视频（若仓库中有素材）
+*.mp3 binary
+*.mp4 binary
+*.webm binary
+*.mov binary
+*.wav binary

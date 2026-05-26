@@ -25,7 +25,7 @@ export default defineManifest({
     type: 'module',
   },
   permissions: ['storage', 'activeTab', 'scripting'],
-  host_permissions: ['http://localhost:3001/*', 'https://*/*', 'http://*/*'],
+  host_permissions: ['http://localhost:19696/*', 'https://*/*', 'http://*/*'],
   content_scripts: [
     {
       matches: ['http://*/*', 'https://*/*'],

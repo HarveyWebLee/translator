@@ -25,10 +25,12 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5173,
+    // 自定义本地开发端口：避开 Vite 默认 5173，与团队约定使用 9696
+    port: 9696,
     strictPort: true,
     hmr: {
-      port: 5174,
+      // HMR WebSocket 走独立端口，避开主端口可能的占用冲突
+      port: 9697,
     },
   },
 });

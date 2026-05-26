@@ -5,7 +5,7 @@ import { z } from 'zod';
  */
 export const envValidationSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  PORT: z.coerce.number().int().positive().default(3001),
+  PORT: z.coerce.number().int().positive().default(19696),
   CORS_ORIGINS: z.string().default('chrome-extension://*'),
 
   DATABASE_URL: z.string().url(),
@@ -26,7 +26,7 @@ export const envValidationSchema = z.object({
   GOOGLE_OAUTH_CLIENT_SECRET: z.string().optional().default(''),
   GITHUB_OAUTH_CLIENT_ID: z.string().optional().default(''),
   GITHUB_OAUTH_CLIENT_SECRET: z.string().optional().default(''),
-  OAUTH_CALLBACK_BASE_URL: z.string().url().default('http://localhost:3001'),
+  OAUTH_CALLBACK_BASE_URL: z.string().url().default('http://localhost:19696'),
 
   SMS_PROVIDER: z.enum(['mock', 'aliyun', 'tencent']).default('mock'),
   SMS_API_KEY: z.string().optional().default(''),

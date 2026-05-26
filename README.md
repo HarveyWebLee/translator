@@ -97,7 +97,7 @@ cp apps/extension/.env.example apps/extension/.env
 - `DATABASE_URL`
 - `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET`
 - 各 LLM Provider 的 API Key（仅高级会员模型必需）
-- `VITE_API_BASE_URL`（默认 `http://localhost:3001`）
+- `VITE_API_BASE_URL`（默认 `http://localhost:19696`）
 
 ### 3. 启动开发环境
 

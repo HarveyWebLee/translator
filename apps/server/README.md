@@ -26,7 +26,7 @@ pnpm prisma:generate
 pnpm dev
 ```
 
-默认端口：`http://localhost:3001`，Swagger 文档：`http://localhost:3001/docs`。
+默认端口：`http://localhost:19696`，Swagger 文档：`http://localhost:19696/docs`。
 
 ## 关键路由
 
