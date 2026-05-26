@@ -1,0 +1,28 @@
+# Cursor 旧版规则文件（Legacy）
+#
+# 本仓库以 `.cursor/rules/*.mdc` 为规则源（详细的、按文件类型/场景分片的规则）。
+# 此文件仅作为兼容旧版 Cursor 客户端的兜底入口，提供最关键的若干条约束。
+# 详细约定请阅读 `.cursor/rules/` 与 `AGENTS.md`。
+#
+# 阅读优先级（高 → 低）：
+#   1. .cursor/rules/*.mdc       —— 项目规则（按文件 glob 生效）
+#   2. AGENTS.md                 —— 代理总览（任务模式、跨子项目指引）
+#   3. 本文件                    —— Legacy 兜底
+
+# ============ 项目基础信息 ============
+本项目为 pnpm + turborepo monorepo，含：
+- apps/extension —— 浏览器扩展（Vite + React 19 + Antd 6 + @crxjs/vite-plugin）
+- apps/server    —— NestJS 11 后端（PostgreSQL + Prisma + JWT + SSE）
+- packages/*     —— 共享 TS 类型 / LLM 抽象 / ESLint / TSConfig 预设
+
+# ============ 必须遵守 ============
+1. 所有回复使用简体中文。
+2. 跨包引用使用 workspace 别名（如 `@translator/shared-types`），禁止相对路径跨包。
+3. 共享类型必须放 `packages/shared-types`，禁止在 apps/* 内重复声明。
+4. NestJS 接口默认受 JwtAuthGuard 保护，公开接口必须显式 `@Public()`。
+5. LLM provider 通过 `LlmProvider` 接口 + `ModelCatalog` 注册；禁止在 controller 中硬编码模型。
+6. 内容脚本（apps/extension/src/content/**）保持 vanilla TS，禁止引入 React。
+7. 提交信息遵循 Angular Conventional Commits，正文使用中文（见 `.cursor/rules/commit-style.mdc`）。
+8. 提交前自动跑 lint-staged（pre-commit hook 已配置），不要用 `--no-verify` 绕过。
+9. 修改代码时添加详细中文注释，但避免无意义的"// 引入模块"之类的废话注释。
+10. 不要主动新建总结/进度文档，除非用户明确要求。

@@ -1,0 +1,50 @@
+---
+description: 内容脚本（content script）特殊约束：vanilla TS、隔离世界、DOM 安全
+globs: apps/extension/src/content/**/*.{ts,css}
+alwaysApply: false
+---
+
+# 内容脚本约定
+
+内容脚本运行于 **隔离世界（isolated world）**，注入第三方页面，所有约束都比扩展页面严格。
+
+## 禁止事项
+
+- ❌ 禁止引入 React / Vue / 其它框架
+- ❌ 禁止动态 import 远程脚本（CSP/MV3 不允许）
+- ❌ 禁止直接 fetch 后端 API —— 必须通过 `chrome.runtime.sendMessage` 转发给 background
+- ❌ 禁止操作页面外 iframe / Shadow DOM 未经明确许可
+
+## CSS 引入
+
+通过 `import './styles.css'` 由 vite + `@crxjs/vite-plugin` 自动注入到 manifest 的 `content_scripts.css`，**不要**在 `manifest.ts` 内手填 `css: [...]`，否则文件不会复制到 dist。
+
+```ts
+// ✅
+import './styles.css';
+import './selection-panel.css';
+```
+
+## 跳过容器（pre / code 等）
+
+需翻译的文本节点判定必须用 `isInsideSkipContainer()`，它对 `closest(SKIP_SELECTOR)` 做祖先级匹配（兼容 hljs 高亮的嵌套 `<span>`）。
+
+```ts
+// ✅
+import { isInsideSkipContainer, SKIP_SELECTOR } from '../shared/utils/skip-selector';
+
+// ❌ 只检查 parentElement.tagName 不够
+if (node.parentElement?.tagName === 'PRE') return;
+```
+
+## DOM 替换
+
+替换文本时必须保留原文以支持「刷新恢复」：
+
+- 父元素首次替换前写入 `data-ds-original`
+- 替换后标记 `data-ds-translated="1"`
+- 用 `data-ds-translating` 防止并发重复处理
+
+## 命名空间
+
+CSS 类、ID、data-attribute 统一加前缀 `ds-`（如 `ds-translator-banner`、`ds-selection-panel`），避免与宿主页冲突。

@@ -1,0 +1,51 @@
+---
+description: Monorepo 项目结构、包别名、turbo 调度约定
+alwaysApply: true
+---
+
+# Monorepo 约定
+
+本仓库是 `pnpm@9 workspace + turborepo` monorepo，结构：
+
+```
+apps/
+  extension/   @translator/extension   浏览器扩展前端（Vite + React 19 + Antd 6）
+  server/      @translator/server      NestJS 11 后端
+packages/
+  shared-types/  @translator/shared-types  前后端共享 TS 类型
+  llm-core/      @translator/llm-core      LlmProvider 抽象
+  eslint-config/ @translator/eslint-config 三套 ESLint 预设
+  tsconfig/      @translator/tsconfig      三套 TS 预设
+```
+
+## 包间引用必须使用 workspace 别名
+
+```ts
+// ✅ GOOD
+import { MembershipTier } from '@translator/shared-types';
+import type { LlmProvider } from '@translator/llm-core';
+
+// ❌ BAD - 禁止相对路径跨包
+import { MembershipTier } from '../../../packages/shared-types/src';
+```
+
+`tsconfig.json` 也应使用 `"extends": "@translator/tsconfig/react.json"` 而非相对路径。
+
+## 命令必须走根脚本或 turbo filter
+
+```bash
+# ✅ GOOD
+pnpm dev                                    # 全部
+pnpm dev:server                              # 仅后端
+pnpm --filter @translator/extension build    # 单个子项目
+
+# ❌ BAD - 不要在子目录里 cd + pnpm install
+```
+
+## 新增前后端共享类型
+
+放入 `packages/shared-types/src/` 并在 `index.ts` re-export；不要在 `apps/server` 或 `apps/extension` 内重复定义。
+
+## Prettier 行尾
+
+配置为 `endOfLine: 'auto'`，Windows / macOS / Linux 贡献者无需调整 git autocrlf。

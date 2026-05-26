@@ -1,0 +1,55 @@
+---
+description: Git 提交规范（Angular Conventional Commits + 中文）
+alwaysApply: true
+---
+
+# 提交规范
+
+本仓库由 `commitlint` + `husky` 强制 [Angular Conventional Commits](https://www.conventionalcommits.org/zh-hans/v1.0.0/) 风格，**正文使用中文**。
+
+## 格式
+
+```
+<type>(<scope>): <subject 中文，不超过 72 字>
+
+<空行>
+<body 中文，说明 why 而非 what>
+
+<空行>
+<footer：BREAKING CHANGE / Closes #123>
+```
+
+## type 枚举
+
+`feat` `fix` `docs` `style` `refactor` `perf` `test` `build` `ci` `chore` `revert`
+
+## scope 建议
+
+- `extension` / `server` —— 子项目
+- `auth` / `llm` / `translation` / `billing` / `quota` —— server 内模块
+- `popup` / `options` / `content` / `background` —— extension 内入口
+- `monorepo` / `deps` / `ci` —— 工程化
+
+## 示例
+
+```
+feat(extension): 升级 Antd 6 并补 OAuth/SMS 登录入口
+
+- Antd 5 → 6.4.3，移除 v5-patch-for-react-19
+- 新增 ThirdPartyLogin 占位组件
+```
+
+```
+fix(server): 修正 SSE 会话在客户端断流时未释放上游连接
+
+服务端注册 req.on('close')，主动 abort upstream fetch
+```
+
+## 自动化
+
+`git commit` 会触发：
+
+1. `pre-commit` → `lint-staged`：暂存区自动 prettier + eslint --fix
+2. `commit-msg` → `commitlint`：校验消息格式
+
+格式不通过的 commit 会被拒绝。

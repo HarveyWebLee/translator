@@ -1,0 +1,48 @@
+---
+description: LLM Provider 接入与会员/Key 来源规范
+globs: apps/server/src/modules/llm/**/*.ts
+alwaysApply: false
+---
+
+# LLM Provider 规范
+
+## 接入新 Provider 的标准步骤
+
+1. 在 `providers/<name>.provider.ts` 实现 `LlmProvider`（来自 `@translator/llm-core`）
+2. 若是 OpenAI 兼容 API，继承 `openai-compatible.base.ts` 即可
+3. 在 `llm.module.ts` 的 `providers` 数组注册
+4. 在 `catalog/model.catalog.ts` 添加模型条目，必填：
+   - `id` `label` `providerId` `tier` `keySource` `capabilities`
+
+## `tier × keySource` 二维矩阵
+
+| keySource | tier   | 说明                                          |
+| --------- | ------ | --------------------------------------------- |
+| `none`    | free   | 免费引擎，无需 Key（Google / LibreTranslate） |
+| `user`    | basic  | 用户自带 Key，前端从 chrome.storage.local 取  |
+| `system`  | premium| 后端 env 持有 Key，开发者付费                 |
+
+新增模型必须明确归类，配置错误会导致：
+
+- `MembershipGuard` 放行了不应放行的用户
+- `LlmService.resolveKey` 拿不到 Key 报错
+
+## Key 解析
+
+```ts
+// LlmService.resolveKey(model, userApiKey?) 内部逻辑：
+// keySource === 'system'  → 从 AppConfigService 拿对应 env
+// keySource === 'user'    → 从请求 body 的 userApiKey 字段拿
+// keySource === 'none'    → 返回 undefined
+```
+
+禁止在 provider 内部直接读 `process.env`，必须通过 `AppConfigService`。
+
+## 流式 vs 非流式
+
+- 实现 `chat()` 是底线
+- 若上游支持 SSE/Streaming，**必须**实现 `chatStream()`；否则 `TranslationService` 流式接口会退化为整体返回，体验差
+
+## 错误处理
+
+provider 内捕获上游异常后必须抛 `HttpException` 子类（或让上层包装），不要直接 throw `Error`，否则全局过滤器无法识别 status code。

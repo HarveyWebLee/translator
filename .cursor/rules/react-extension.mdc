@@ -1,0 +1,55 @@
+---
+description: 浏览器扩展前端约定（React 19 + Antd 6 + Zustand + Chrome MV3）
+globs: apps/extension/src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# 扩展前端约定
+
+## 状态管理分层
+
+- **Zustand**：跨组件共享的会话/偏好（`shared/store/auth.store.ts` / `prefs.store.ts`）
+- **React Query**：服务端数据（模型列表、用户信息）
+- **`chrome.storage`**：持久化（local = 敏感不同步；sync = 跨设备偏好）
+
+不要把后端响应直接存 Zustand —— 走 React Query 拿缓存。
+
+## API 调用
+
+统一通过 `shared/api/client.ts` 的 fetch 封装，自动附 token、401 自动 refresh。
+
+```ts
+// ✅
+import { llmApi } from '../shared/api/llm';
+const data = await llmApi.models();
+
+// ❌ 不要直接用 fetch / axios
+```
+
+## Chrome 存储键
+
+新增键统一在 `shared/storage/keys.ts` 声明，区分 `LOCAL_KEYS` / `SYNC_KEYS`，禁止硬编码字符串。
+
+## Antd 6 注意
+
+- 已原生兼容 React 19，**禁止重新引入** `@ant-design/v5-patch-for-react-19`
+- 使用 `App.useApp()` 获取 `message`/`notification`/`modal` 的实例化 hook，避免静态调用警告
+- Form 推荐 `Form.useForm()` + `onFinish` 模式
+
+## 跨入口通信
+
+popup / options / content / background 之间用 `chrome.runtime.sendMessage`，消息类型集中在 `background/messages.ts` 的 `BgMessage` 联合类型中扩展。
+
+```ts
+// ✅ 新增消息类型时：
+export type BgMessage =
+  | ...existing
+  | { type: 'NEW_ACTION'; payload: NewActionPayload };
+```
+
+后台 `service-worker.ts` 的 switch 必须新增对应 case。
+
+## 路径别名
+
+- `@/` 指向 `apps/extension/src/`
+- 跨包用 `@translator/shared-types` 等 workspace 别名

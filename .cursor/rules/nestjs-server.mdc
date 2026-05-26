@@ -1,0 +1,64 @@
+---
+description: NestJS 后端约定（模块/守卫/装饰器/响应包装）
+globs: apps/server/**/*.ts
+alwaysApply: false
+---
+
+# NestJS 后端约定
+
+## 模块组织
+
+`apps/server/src/modules/<name>/` 内：
+
+- `<name>.module.ts` 声明 providers / controllers / exports
+- `<name>.service.ts` 业务逻辑（无 HTTP 关心）
+- `<name>.controller.ts` 仅做参数校验、转发到 service
+- `dto/*.dto.ts` 用 `class-validator` 装饰
+
+新增模块后必须在 `app.module.ts` 注册。
+
+## 全局守卫与装饰器
+
+- `JwtAuthGuard` 全局启用，公开接口必须显式 `@Public()`
+- 限制会员等级用 `@RequireTier('basic')` 或 `@RequireTier('premium')`，配合 `MembershipGuard`
+- 获取当前用户用 `@CurrentUser() user: Express.User`
+
+```ts
+// ✅ 限定高级会员
+@RequireTier('premium')
+@Get('advanced-models')
+list() { ... }
+
+// ✅ 公开接口
+@Public()
+@Get('health')
+health() { ... }
+```
+
+## 响应与异常
+
+- 全局 `ResponseInterceptor` 自动包装为 `{ ok: true, data }`
+- 抛 `HttpException` 子类（`BadRequestException` 等），由 `HttpExceptionFilter` 转 `{ ok: false, error }`
+- 禁止在 controller 内手写 `res.json(...)`
+
+## 配置访问
+
+`AppConfigService` 由 `ConfigModule` 提供，已经过 zod 校验。**禁止**直接读 `process.env`。
+
+```ts
+// ✅
+constructor(private readonly config: AppConfigService) {}
+const url = this.config.libreTranslateUrl;
+
+// ❌
+const url = process.env.LIBRE_TRANSLATE_URL;
+```
+
+## SSE
+
+使用 `@Sse('path')` 装饰器返回 `Observable<MessageEvent>`；事件名约定：
+`segment-done` / `progress` / `done` / `error`。
+
+## 数据库
+
+通过 `PrismaService` 注入；新增模型需 `pnpm --filter @translator/server prisma:migrate dev --name <desc>` 生成迁移。
