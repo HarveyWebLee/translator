@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Card, Divider, Space, Switch, Tag, Typography } from 'antd';
+import { Alert, Button, Card, Divider, message, Space, Switch, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 
 import { authApi } from '../shared/api/auth';
 import { storageGet, storageGetMany, storageSet } from '../shared/storage/chrome-storage';
 import { LOCAL_KEYS, SYNC_KEYS } from '../shared/storage/keys';
+import { isInjectableTab } from '../shared/utils/tab';
 
 const { Title, Text, Link } = Typography;
 
@@ -41,21 +42,19 @@ async function detectTab(tabId: number): Promise<DetectionResult> {
   return result as DetectionResult;
 }
 
-async function sendTab(tabId: number, message: { type: string }): Promise<void> {
+async function sendTab(tabId: number, payload: { type: string }): Promise<void> {
   try {
-    await chrome.tabs.sendMessage(tabId, message);
-  } catch {
-    // 脚本未注入，主动注入一次
-    await chrome.scripting.executeScript({
-      target: { tabId },
-      files: ['src/content/content.ts', 'src/content/selection-translate.ts'],
-    });
-    await chrome.tabs.sendMessage(tabId, message);
+    await chrome.tabs.sendMessage(tabId, payload);
+  } catch (cause) {
+    // content script 由 manifest 在 http(s) 页自动注入；失败多为扩展更新后未刷新的旧标签
+    throw new Error('无法与页面通信，请刷新该网页后重试', { cause });
   }
 }
 
 export function App() {
   const [detection, setDetection] = useState<DetectionResult | null>(null);
+  /** 当前活动标签不是 http(s)（如在 chrome://extensions 打开 popup） */
+  const [tabNotInjectable, setTabNotInjectable] = useState(false);
   const [prefs, setPrefs] = useState({
     enabled: true,
     autoPrompt: true,
@@ -84,12 +83,14 @@ export function App() {
         selectTranslate: data[SYNC_KEYS.SELECT_TRANSLATE] === true,
       });
       const tab = await getActiveTab();
-      if (tab?.id && tab.url?.startsWith('http')) {
-        try {
-          setDetection(await detectTab(tab.id));
-        } catch {
-          /* ignore */
-        }
+      if (!isInjectableTab(tab)) {
+        setTabNotInjectable(true);
+        return;
+      }
+      try {
+        setDetection(await detectTab(tab.id));
+      } catch {
+        /* ignore */
       }
     })();
   }, []);
@@ -105,19 +106,31 @@ export function App() {
 
   const handleTranslate = async (): Promise<void> => {
     const tab = await getActiveTab();
-    if (tab?.id) await sendTab(tab.id, { type: 'SHOW_TRANSLATE_BAR' });
-    window.close();
+    if (!isInjectableTab(tab)) {
+      message.warning('请在普通网页（http/https）上使用，无法在浏览器内置页翻译');
+      return;
+    }
+    try {
+      await sendTab(tab.id, { type: 'SHOW_TRANSLATE_BAR' });
+      window.close();
+    } catch (err) {
+      message.error(err instanceof Error ? err.message : '发送失败');
+    }
   };
 
   const handleDetect = async (): Promise<void> => {
     const tab = await getActiveTab();
-    if (tab?.id) {
+    if (!isInjectableTab(tab)) {
+      message.warning('请在普通网页（http/https）上使用');
+      setTabNotInjectable(true);
+      return;
+    }
+    setTabNotInjectable(false);
+    try {
       await sendTab(tab.id, { type: 'RUN_DETECT' });
-      try {
-        setDetection(await detectTab(tab.id));
-      } catch {
-        /* ignore */
-      }
+      setDetection(await detectTab(tab.id));
+    } catch (err) {
+      message.error(err instanceof Error ? err.message : '检测失败');
     }
   };
 
@@ -144,11 +157,13 @@ export function App() {
           className={`ds-popup__dot ${detection?.isEnglish ? 'ds-popup__dot--en' : 'ds-popup__dot--other'}`}
         />
         <Text>
-          {detection
-            ? detection.isEnglish
-              ? `当前页疑似英文（${detection.lang}）`
-              : `当前页可能非英文（${detection.lang}）`
-            : '正在检测…'}
+          {tabNotInjectable
+            ? '当前标签页不支持（请切换到普通网页）'
+            : detection
+              ? detection.isEnglish
+                ? `当前页疑似英文（${detection.lang}）`
+                : `当前页可能非英文（${detection.lang}）`
+              : '正在检测…'}
         </Text>
       </div>
 

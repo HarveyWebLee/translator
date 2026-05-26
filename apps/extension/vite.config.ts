@@ -7,6 +7,9 @@ import { defineConfig } from 'vite';
 import manifest from './src/manifest';
 
 export default defineConfig({
+  // 生产包必须用相对路径：默认 base='/' 会在 popup/options HTML 里生成
+  // src="/assets/..."，Chrome 扩展页解析会报 Invalid path（?errors= 页常见）
+  base: './',
   plugins: [react(), crx({ manifest })],
   resolve: {
     alias: {
