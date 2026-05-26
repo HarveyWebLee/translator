@@ -4,7 +4,7 @@ Chrome / Edge 浏览器扩展（Manifest V3）。
 
 ## 技术栈
 
-- React 19 + Antd 5（含 `@ant-design/v5-patch-for-react-19`）
+- React 19 + Antd 6（原生兼容 React 19）
 - Vite 5 + `@crxjs/vite-plugin`
 - 多入口：`popup` / `options`（React），`content` / `selection-translate` / `service-worker`（原生 TS）
 

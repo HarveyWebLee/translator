@@ -50,7 +50,7 @@ translator/
 
 | 层级       | 选型                                                                                                             |
 | ---------- | ---------------------------------------------------------------------------------------------------------------- |
-| 前端       | React 19、Ant Design 5（含 `@ant-design/v5-patch-for-react-19`）、Zustand、@tanstack/react-query、Vite、@crxjs/vite-plugin |
+| 前端       | React 19、Ant Design 6（原生兼容 React 19）、Zustand、@tanstack/react-query、Vite、@crxjs/vite-plugin                       |
 | 浏览器扩展 | Chrome Manifest V3（service worker + content scripts + popup/options）                                            |
 | 后端       | NestJS 11、Prisma、PostgreSQL、JWT（refresh rotation）、Passport、Swagger、helmet、zod                            |
 | 流式协议   | SSE（fetch + ReadableStream，前端兼容扩展环境）                                                                   |

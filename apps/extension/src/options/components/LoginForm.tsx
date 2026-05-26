@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import { useAuthStore } from '../../shared/store/auth.store';
 
+import { ThirdPartyLogin } from './ThirdPartyLogin';
+
 export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
   const login = useAuthStore((s) => s.login);
   const [error, setError] = useState<string | null>(null);
@@ -45,6 +47,7 @@ export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
       <Button type="link" block onClick={onSwitch}>
         没有账号？立即注册
       </Button>
+      <ThirdPartyLogin />
     </Form>
   );
 }

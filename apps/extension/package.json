@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "AI 网页翻译扩展：React 19 + Antd 5 + Vite + @crxjs",
+  "description": "AI 网页翻译扩展：React 19 + Antd 6 + Vite + @crxjs",
   "scripts": {
     "dev": "vite",
     "build": "tsc -p tsconfig.json --noEmit && vite build",
@@ -13,12 +13,11 @@
     "clean": "rimraf dist .turbo *.tsbuildinfo"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.5.1",
-    "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@ant-design/icons": "^6.0.0",
     "@tanstack/react-query": "^5.59.16",
     "@translator/llm-core": "workspace:*",
     "@translator/shared-types": "workspace:*",
-    "antd": "^5.21.4",
+    "antd": "^6.4.3",
     "dayjs": "^1.11.13",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
