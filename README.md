@@ -75,15 +75,22 @@ translator/
 
 ### 0. 环境要求
 
-- Node.js ≥ 20.11
+- **Node.js ≥ 20.19**（Prisma 7 硬性要求；低于此版本运行 `prisma migrate` 会出现 `ERR_REQUIRE_ESM`）
 - pnpm ≥ 9
-- （可选）PostgreSQL —— 后端默认连接本地数据库，可用仓库内 `apps/server/docker-compose.yml` 一键启动
+- PostgreSQL —— 后端需要数据库；可用 `apps/server/docker-compose.yml` 一键启动
+
+```bash
+# 推荐使用 nvm（仓库根目录已提供 .nvmrc → 22.12.0）
+nvm install && node -v
+```
 
 ### 1. 安装依赖
 
 ```bash
 pnpm install
 ```
+
+> 若在升级 Node 前已安装过依赖，升级后建议重新执行一次 `pnpm install`。
 
 ### 2. 复制环境变量
 
@@ -95,11 +102,21 @@ cp apps/extension/.env.example apps/extension/.env
 按需填入：
 
 - `DATABASE_URL`
-- `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET`
+- `JWT_SECRET`（≥32 字符）、`JWT_ACCESS_TTL_SEC` / `JWT_REFRESH_TTL_SEC`
 - 各 LLM Provider 的 API Key（仅高级会员模型必需）
 - `VITE_API_BASE_URL`（默认 `http://localhost:19696`）
 
-### 3. 启动开发环境
+### 3. 数据库迁移与种子（后端）
+
+```bash
+cd apps/server && docker compose up -d   # 启动 PostgreSQL（首次）
+pnpm --filter @translator/server prisma:migrate
+pnpm --filter @translator/server prisma:seed   # 可选：free/basic/premium 测试账号
+```
+
+详见 [apps/server/README.md](apps/server/README.md#prisma-7) 与 [技术实现文档 · Prisma 7](docs/技术实现文档.md#231-prisma-orm-7)。
+
+### 4. 启动开发环境
 
 ```bash
 # 并行启动扩展和后端
@@ -110,7 +127,7 @@ pnpm dev:web      # 仅扩展
 pnpm dev:server   # 仅后端
 ```
 
-### 4. 加载浏览器扩展
+### 5. 加载浏览器扩展
 
 ```bash
 pnpm build:web

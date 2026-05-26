@@ -5,7 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AppConfigService } from '../../../config/app-config.service';
 import { PrismaService } from '../../prisma/prisma.service';
 
-import type { Tier } from '@prisma/client';
+import type { Tier } from '../../../prisma-types';
 
 interface JwtPayload {
   sub: string;

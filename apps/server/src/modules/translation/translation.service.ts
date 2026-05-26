@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Tier } from '@prisma/client';
 
+import { Tier } from '../../prisma-types';
 import { LlmService } from '../llm/llm.service';
 import { ProviderRegistry } from '../llm/registry/provider.registry';
 import { QuotaService } from '../quota/quota.service';

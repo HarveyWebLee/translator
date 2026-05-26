@@ -18,15 +18,23 @@ docker compose up -d
 # 2. 复制环境变量
 cp .env.example .env
 
-# 3. 数据库迁移与生成 Prisma Client
+# 3. 数据库迁移（Prisma 7，需 Node ≥ 20.19）
 pnpm prisma:migrate
-pnpm prisma:generate
 
-# 4. 启动开发服务
+# 4. （可选）写入开发测试账号
+pnpm prisma:seed
+# free@dev.local / basic@dev.local / premium@dev.local，密码均为 dev-password-123
+
+# 5. 启动开发服务（会自动 prisma generate；Client 源码在 src/generated/prisma 并已纳入版本库）
 pnpm dev
 ```
 
 默认端口：`http://localhost:19696`，Swagger 文档：`http://localhost:19696/docs`。
+
+## 数据库（Prisma 7）
+
+命令：`prisma:migrate` · `prisma:seed` · `prisma:generate` · `prisma:deploy` · `prisma:studio`。  
+完整说明（Node ≥ 20.19、`ERR_REQUIRE_ESM` 排查、adapter 架构）见 [技术实现文档 §2.3.1](../../docs/技术实现文档.md#231-prisma-orm-7)。
 
 ## 关键路由
 

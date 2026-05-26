@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
-import { Tier } from '@prisma/client';
 
+import { Tier } from '../../prisma-types';
 import { PrismaService } from '../prisma/prisma.service';
 
 /**

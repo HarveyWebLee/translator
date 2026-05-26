@@ -43,13 +43,13 @@ pnpm format
 
 ## 失败时的处理
 
-| 失败类型               | 行动                                                |
-| ---------------------- | --------------------------------------------------- |
-| typecheck 报错         | 必须修复，不允许 `// @ts-ignore` 绕过               |
-| eslint error           | 修复；warning 可暂留但需在 PR 说明                  |
-| build 失败             | 必修复                                              |
-| `prisma format` 不一致 | 跑 `pnpm --filter @translator/server prisma:format` |
-| commitlint 拒绝消息    | 重写消息，参照 `.cursor/rules/commit-style.mdc`     |
+| 失败类型                         | 行动                                                                                |
+| -------------------------------- | ----------------------------------------------------------------------------------- |
+| typecheck 报错                   | 必须修复，不允许 `// @ts-ignore` 绕过                                               |
+| eslint error                     | 修复；warning 可暂留但需在 PR 说明                                                  |
+| build 失败                       | 必修复                                                                              |
+| 改了 `schema.prisma` 未 generate | 跑 `pnpm --filter @translator/server prisma:generate` 并提交 `src/generated/prisma` |
+| commitlint 拒绝消息              | 重写消息，参照 `.cursor/rules/commit-style.mdc`                                     |
 
 ## 反模式
 

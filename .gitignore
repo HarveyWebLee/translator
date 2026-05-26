@@ -15,10 +15,6 @@ build/
 config.local.json
 apps/server/.env
 
-# Prisma
-apps/server/prisma/dev.db
-apps/server/prisma/*.db-journal
-
 # 日志
 *.log
 logs/

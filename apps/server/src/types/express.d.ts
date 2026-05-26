@@ -1,4 +1,4 @@
-import type { Tier } from '@prisma/client';
+import type { Tier } from '../prisma-types';
 
 declare global {
   namespace Express {

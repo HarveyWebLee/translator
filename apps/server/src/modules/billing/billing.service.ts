@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SubscriptionStatus, Tier } from '@prisma/client';
 
+import { SubscriptionStatus, Tier } from '../../prisma-types';
 import { PrismaService } from '../prisma/prisma.service';
 
 import type { SubscribeDto } from './dto/subscribe.dto';

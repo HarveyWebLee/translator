@@ -16,7 +16,7 @@
 | 后端 | NestJS 11 + PostgreSQL + Prisma + JWT + SSE                               |
 | LLM  | DeepSeek / OpenAI / Anthropic / Ollama / Google 公开端点 / LibreTranslate |
 | 会员 | free / basic / premium 三档，绑定可用模型与 API Key 来源                  |
-| Node | ≥ 20.11                                                                   |
+| Node | ≥ 20.19（Prisma 7；`.nvmrc` 为 22.12.0；低于 20.19 会 `ERR_REQUIRE_ESM`） |
 | pnpm | ≥ 9                                                                       |
 
 ---
@@ -94,9 +94,17 @@ pnpm lint              # 全仓 ESLint
 pnpm lint:fix
 pnpm format            # Prettier 全仓
 pnpm format:check
+
+# 后端数据库（Prisma 7，需 Node ≥ 20.19）
+pnpm --filter @translator/server prisma:generate
+pnpm --filter @translator/server prisma:migrate
+pnpm --filter @translator/server prisma:seed      # 不随 migrate 自动执行
+pnpm --filter @translator/server prisma:deploy
 ```
 
 子项目内同名脚本一致，可用 `pnpm --filter @translator/<pkg> <task>` 精准调度。
+
+**Prisma 7 注意**：`migrate dev` 不会自动 `generate` / seed；Client 在 `apps/server/src/generated/prisma`（已入库）。CLI 在 Node < 20.19 上可能报 `ERR_REQUIRE_ESM`，需升级 Node（`nvm install`）。详见 `docs/技术实现文档.md` §2.3.1。
 
 ---
 
@@ -125,10 +133,8 @@ pnpm format:check
 
 ### 5.3 文件编辑
 
-- **日常编辑不会自动格式化**：`.cursor/hooks.json` 已移除 `afterFileEdit` 钩子，以减少终端弹出和性能开销
-- 格式化由 husky `pre-commit` 阶段的 `lint-staged --quiet` 兜底：对暂存文件跑 `prettier --write` + `eslint --fix`，**成功时无任何输出**，仅失败时报错
-- `commit-msg` 由 `commitlint` 校验，通过时静默
-- `.cursor/hooks/format-after-edit.sh` 脚本保留备用，如需恢复实时格式化，在 `.cursor/hooks.json` 重新加入 `afterFileEdit` 配置即可
+- 格式化由 husky `pre-commit` 的 `lint-staged` 兜底：对暂存文件跑 `prettier --write` + `eslint --fix`
+- `commit-msg` 由 `commitlint` 校验
 
 ---
 

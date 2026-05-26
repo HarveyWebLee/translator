@@ -48,10 +48,10 @@ health() { ... }
 ```ts
 // ✅
 constructor(private readonly config: AppConfigService) {}
-const url = this.config.libreTranslateUrl;
+const url = this.config.get('LIBRE_TRANSLATE_BASE_URL');
 
 // ❌
-const url = process.env.LIBRE_TRANSLATE_URL;
+const url = process.env.LIBRE_TRANSLATE_BASE_URL;
 ```
 
 ## SSE
@@ -59,6 +59,10 @@ const url = process.env.LIBRE_TRANSLATE_URL;
 使用 `@Sse('path')` 装饰器返回 `Observable<MessageEvent>`；事件名约定：
 `segment-done` / `progress` / `done` / `error`。
 
-## 数据库
+## 数据库（Prisma 7）
 
-通过 `PrismaService` 注入；新增模型需 `pnpm --filter @translator/server prisma:migrate dev --name <desc>` 生成迁移。
+- **Node ≥ 20.19**；CLI 配置见 `apps/server/prisma.config.ts`（`DATABASE_URL` 不再写在 `schema.prisma`）
+- Client 生成到 `src/generated/prisma`（纳入版本库，改 schema 后需 `prisma generate` 并提交）；业务代码从 `src/prisma-types.ts` 引用枚举/类型，禁止 `@prisma/client`
+- `PrismaService` 通过 `@prisma/adapter-pg` + `AppConfigService.get('DATABASE_URL')` 构造，禁止 `new PrismaClient()` 无 adapter
+- 改 schema 后：`pnpm --filter @translator/server prisma:generate`，再 `prisma:migrate dev --name <desc>`
+- Prisma 7：`migrate dev` 不再自动 `generate` / seed；种子脚本 `prisma/seed.ts`，执行 `pnpm prisma:seed`

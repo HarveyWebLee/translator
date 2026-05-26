@@ -4,7 +4,7 @@
   "private": true,
   "description": "AI 网页翻译扩展（React 19 + Antd 6）与 NestJS 后端组成的 monorepo",
   "engines": {
-    "node": ">=20.11.0",
+    "node": ">=20.19.0",
     "pnpm": ">=9.0.0"
   },
   "packageManager": "pnpm@9.12.3",

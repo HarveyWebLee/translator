@@ -2,10 +2,10 @@ import { randomBytes, createHash } from 'node:crypto';
 
 import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Tier } from '@prisma/client';
 import * as argon2 from 'argon2';
 
 import { AppConfigService } from '../../config/app-config.service';
+import { Tier } from '../../prisma-types';
 import { PrismaService } from '../prisma/prisma.service';
 
 import type { LoginDto } from './dto/login.dto';

@@ -1,13 +1,15 @@
 // 翻译扩展后端 Prisma schema
 // 包含：用户、订阅、用量、SSE 会话、OAuth/SMS 占位表
+//
+// Prisma 7：Client 生成到 src/generated/prisma；数据库 URL 见 prisma.config.ts
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 /// 会员等级
