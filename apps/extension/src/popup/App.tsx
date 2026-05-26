@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Card, Divider, message, Space, Switch, Tag, Typography } from 'antd';
+import { Button, Card, Divider, message, Space, Switch, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 
 import { authApi } from '../shared/api/auth';
 import { storageGet, storageGetMany, storageSet } from '../shared/storage/chrome-storage';
 import { LOCAL_KEYS, SYNC_KEYS } from '../shared/storage/keys';
+import { isChromeExtensionContext, openOptionsPage } from '../shared/utils/extension-context';
 import { isInjectableTab } from '../shared/utils/tab';
 
-const { Title, Text, Link } = Typography;
+const { Title, Text } = Typography;
 
 interface DetectionResult {
   isEnglish: boolean;
@@ -15,6 +16,7 @@ interface DetectionResult {
 }
 
 async function getActiveTab(): Promise<chrome.tabs.Tab | undefined> {
+  if (!isChromeExtensionContext()) return undefined;
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   return tab;
 }
@@ -56,7 +58,6 @@ export function App() {
   /** 当前活动标签不是 http(s)（如在 chrome://extensions 打开 popup） */
   const [tabNotInjectable, setTabNotInjectable] = useState(false);
   const [prefs, setPrefs] = useState({
-    enabled: true,
     autoPrompt: true,
     selectTranslate: false,
   });
@@ -73,12 +74,10 @@ export function App() {
   useEffect(() => {
     void (async () => {
       const data = await storageGetMany<Record<string, boolean | undefined>>('sync', [
-        SYNC_KEYS.ENABLED,
         SYNC_KEYS.AUTO_PROMPT,
         SYNC_KEYS.SELECT_TRANSLATE,
       ]);
       setPrefs({
-        enabled: data[SYNC_KEYS.ENABLED] !== false,
         autoPrompt: data[SYNC_KEYS.AUTO_PROMPT] !== false,
         selectTranslate: data[SYNC_KEYS.SELECT_TRANSLATE] === true,
       });
@@ -98,7 +97,6 @@ export function App() {
   const togglePref = async (key: keyof typeof prefs, val: boolean): Promise<void> => {
     setPrefs((p) => ({ ...p, [key]: val }));
     await storageSet('sync', {
-      [SYNC_KEYS.ENABLED]: key === 'enabled' ? val : prefs.enabled,
       [SYNC_KEYS.AUTO_PROMPT]: key === 'autoPrompt' ? val : prefs.autoPrompt,
       [SYNC_KEYS.SELECT_TRANSLATE]: key === 'selectTranslate' ? val : prefs.selectTranslate,
     });
@@ -167,32 +165,8 @@ export function App() {
         </Text>
       </div>
 
-      {!user && (
-        <Alert
-          type="warning"
-          showIcon
-          message="尚未登录"
-          description={
-            <span>
-              请先 <Link onClick={() => chrome.runtime.openOptionsPage?.()}>打开选项页</Link>{' '}
-              完成登录。
-            </span>
-          }
-          style={{ marginBottom: 12 }}
-        />
-      )}
-
       <Card size="small" styles={{ body: { padding: 12 } }}>
-        <Space direction="vertical" style={{ width: '100%' }} size={8}>
-          <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-            <Text>启用扩展</Text>
-            <Switch
-              checked={prefs.enabled}
-              onChange={(v) => {
-                void togglePref('enabled', v);
-              }}
-            />
-          </Space>
+        <Space orientation="vertical" style={{ width: '100%' }} size={8}>
           <Space style={{ width: '100%', justifyContent: 'space-between' }}>
             <Text>检测到英文页自动提示</Text>
             <Switch
@@ -216,14 +190,14 @@ export function App() {
 
       <Divider style={{ margin: '12px 0' }} />
 
-      <Space style={{ width: '100%' }} direction="vertical">
+      <Space style={{ width: '100%' }} orientation="vertical">
         <Button type="primary" block onClick={() => void handleTranslate()}>
           翻译当前页
         </Button>
         <Button block onClick={() => void handleDetect()}>
           重新检测
         </Button>
-        <Button type="link" block onClick={() => chrome.runtime.openOptionsPage?.()}>
+        <Button type="link" block onClick={openOptionsPage}>
           打开设置
         </Button>
       </Space>
