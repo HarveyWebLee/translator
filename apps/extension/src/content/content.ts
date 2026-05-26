@@ -185,7 +185,7 @@ async function flushQueue(settings: SettingsResponse): Promise<void> {
         providerId: settings.currentProvider,
         modelId: settings.currentModel,
         segments,
-        targetLang: 'zh-CN',
+        targetLang: settings.targetLang,
       },
     });
   } catch (e) {

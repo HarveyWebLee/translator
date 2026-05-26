@@ -42,6 +42,7 @@ async function getSettings(): Promise<SettingsResponse> {
     tier,
     currentProvider: (prefs[SYNC_KEYS.CURRENT_PROVIDER] as string | undefined) ?? 'libre-translate',
     currentModel: (prefs[SYNC_KEYS.CURRENT_MODEL] as string | undefined) ?? 'libre-translate',
+    targetLang: (prefs[SYNC_KEYS.TARGET_LANG] as string | undefined) ?? 'zh-CN',
   };
 }
 

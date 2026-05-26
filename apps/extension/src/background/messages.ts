@@ -26,6 +26,7 @@ export interface SettingsResponse {
   tier: 'free' | 'basic' | 'premium';
   currentProvider: string;
   currentModel: string;
+  targetLang: string;
 }
 
 /** content 监听到的流事件（由 background 通过 sendMessage 推送） */
