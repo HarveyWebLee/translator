@@ -1,13 +1,6 @@
 {
   "version": 1,
   "hooks": {
-    "afterFileEdit": [
-      {
-        "command": ".cursor/hooks/format-after-edit.sh",
-        "matcher": "Write|TabWrite",
-        "failClosed": false
-      }
-    ],
     "beforeShellExecution": [
       {
         "command": ".cursor/hooks/guard-shell.sh",

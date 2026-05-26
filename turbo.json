@@ -12,6 +12,7 @@
       "outputs": ["dist/**", "build/**", ".nest/**"]
     },
     "dev": {
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },

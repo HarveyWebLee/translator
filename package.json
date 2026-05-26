@@ -9,9 +9,9 @@
   },
   "packageManager": "pnpm@9.12.3",
   "scripts": {
-    "dev": "turbo run dev --parallel",
-    "dev:web": "turbo run dev --filter=@translator/extension",
-    "dev:server": "turbo run dev --filter=@translator/server",
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=@translator/extension...",
+    "dev:server": "turbo run dev --filter=@translator/server...",
     "build": "turbo run build",
     "build:web": "turbo run build --filter=@translator/extension",
     "build:server": "turbo run build --filter=@translator/server",

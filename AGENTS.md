@@ -125,8 +125,10 @@ pnpm format:check
 
 ### 5.3 文件编辑
 
-- 编辑后会触发 `.cursor/hooks/format-after-edit.sh`，自动 `prettier --write`，无需手动格式化
-- 与 husky pre-commit 双重保险，提交时再次校验
+- **日常编辑不会自动格式化**：`.cursor/hooks.json` 已移除 `afterFileEdit` 钩子，以减少终端弹出和性能开销
+- 格式化由 husky `pre-commit` 阶段的 `lint-staged --quiet` 兜底：对暂存文件跑 `prettier --write` + `eslint --fix`，**成功时无任何输出**，仅失败时报错
+- `commit-msg` 由 `commitlint` 校验，通过时静默
+- `.cursor/hooks/format-after-edit.sh` 脚本保留备用，如需恢复实时格式化，在 `.cursor/hooks.json` 重新加入 `afterFileEdit` 配置即可
 
 ---
 
